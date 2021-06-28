@@ -1,13 +1,13 @@
 import React from "react";
 import Navbar from "./layout/Navbar";
 import Footer from "./layout/Footer";
-import CountryTableContainer from "./components/CountryTableContainer";
+import CountryTable from "./components/CountryTable";
 
 function App() {
   return (
     <div>
       <Navbar></Navbar>
-      <CountryTableContainer></CountryTableContainer>
+      <CountryTable></CountryTable>
       <Footer></Footer>
     </div>
   );

@@ -6,7 +6,7 @@ const axiosInstance = axios.create({ baseURL: restCountriesURL });
 
 const apiVersion = "v2"
 
-const requiredFieldsFilter="?fields=name;capital;region;flag"
+const requiredFieldsFilter="?fields=name;capital;region;flag;alpha2Code"
 
 
 export default axiosInstance;
