@@ -8,16 +8,45 @@ class CountryTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      persistentCountries: [],
       countries: [],
+      capitalSearchKeyword: "",
+      tableSearchKeyword: "",
       nameSortingDirection: null,
       capitalSortingDirection: null,
       regionSortingDirection: null,
     };
   }
-  componentDidMount = () => {
-    axiosInstance
-      .get(all)
-      .then((countries) => this.setState({ countries: countries.data }));
+
+  componentDidMount = async () => {
+    const response = await axiosInstance.get(all);
+    this.setState({ persistentCountries: response.data });
+    this.setState({ countries: response.data });
+  };
+
+  capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+  handleSearchInCapitals = (e) => {
+    const value = this.capitalize(e.target.value);
+
+    if (value) {
+      const countries=JSON.parse(JSON.stringify(this.state.persistentCountries))
+      const data = countries.filter((country) => {
+        if (country.capital.search(value) === 0) { return true }
+        else return false;
+      })
+  
+      this.setState({countries:data})
+      this.setState({capitalSearchKeyword: value });
+    } else {
+      this.setState({ countries: this.state.persistentCountries });
+      this.setState({capitalSearchKeyword: value });
+    }
+  };
+  handleSearchInTables = (e) => {
+    this.setState({ tableSearchKeyword: this.capitalize(e.target.value) });
   };
   assignNullExcept = (field) => {
     if (field === "name") {
@@ -78,20 +107,26 @@ class CountryTable extends Component {
         <hr />
         <div className="row m-4">
           <div className="input-group mb-3 mt-3">
-            <input type="text" className="form-control" placeholder="Search" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search"
+              value={this.state.tableSearchKeyword}
+              onChange={this.handleSearchInTables}
+            />
             <span className="input-group-text px-5">
               <VscSearch size="1.5em" />
             </span>
           </div>
           <div className="table-responsive" style={tableStyles}>
-            <table className="table align-middle table-striped table-hover text-center">
-              <thead style={fixedHeadStyle} className="table-light">
+            <table className="table align-middle table-striped table-hover table-bordered">
+              <thead style={fixedHeadStyle} className="table-light text-center">
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">
                     Name
                     <button
-                      className="btn p-0 my-auto"
+                      className="btn btn-light rounded-circle px-0"
                       onClick={() => this.sortingRequest("name")}
                     >
                       <SortingIcon
@@ -100,20 +135,31 @@ class CountryTable extends Component {
                     </button>
                   </th>
                   <th scope="col">
-                    Capital
-                    <button
-                      className="btn p-0 my-auto"
-                      onClick={() => this.sortingRequest("capital")}
-                    >
-                      <SortingIcon
-                        direction={this.state.capitalSortingDirection}
-                      />
-                    </button>
+                    <div className="d-inline-flex rounded-circle px-0">
+                      <div className="my-auto">Capital</div>
+                      <button
+                        className="btn btn-light rounded-circle px-0"
+                        onClick={() => this.sortingRequest("capital")}
+                      >
+                        <SortingIcon
+                          direction={this.state.capitalSortingDirection}
+                        />
+                      </button>
+                      <div className="input-group pt-1">
+                        <input
+                          type="text"
+                          className="form-control-sm"
+                          placeholder="Search in capitals"
+                          onChange={this.handleSearchInCapitals}
+                          value={this.state.capitalSearchKeyword}
+                        />
+                      </div>
+                    </div>
                   </th>
                   <th scope="col">
                     Region
                     <button
-                      className="btn p-0 my-auto"
+                      className="btn btn-light rounded-circle px-0"
                       onClick={() => this.sortingRequest("region")}
                     >
                       <SortingIcon
@@ -121,30 +167,27 @@ class CountryTable extends Component {
                       />
                     </button>
                   </th>
-                  <th scope="col">Flag</th>
+                  <th scope="col" className="pb-3">
+                    Flag
+                  </th>
                 </tr>
               </thead>
-              <tbody>
-                {countries ? (
+              <tbody className="text-head">
+                {countries &&
                   countries.map((country, index) => {
-                    return (
-                      <tr key={country.alpha2Code}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{country.name}</td>
-                        <td>{country.capital || "-"}</td>
-                        <td>{country.region || "-"}</td>
-                        <td>
-                          <Flag
-                            svgURL={country.flag}
-                            countryName={country.name}
-                          ></Flag>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <div></div>
-                )}
+                    return (<tr key={country.alpha2Code}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{country.name}</td>
+                      <td>{country.capital || "-"}</td>
+                      <td>{country.region || "-"}</td>
+                      <td>
+                        <Flag
+                          svgURL={country.flag}
+                          countryName={country.name}
+                        ></Flag>
+                      </td>
+                    </tr>);
+                  })}
               </tbody>
             </table>
           </div>
