@@ -5,7 +5,6 @@ import SortingIcon from "./SortingIcon";
 import axiosInstance, { all } from "../api/ApiVariables";
 import "../style.css";
 
-
 class CountryTable extends Component {
   constructor(props) {
     super(props);
@@ -34,22 +33,50 @@ class CountryTable extends Component {
     const value = this.capitalize(e.target.value);
 
     if (value) {
-      const countries=JSON.parse(JSON.stringify(this.state.persistentCountries))
+      this.setState({tableSearchKeyword:""})
+      const countries = JSON.parse(
+        JSON.stringify(this.state.persistentCountries)
+      );
       const data = countries.filter((country) => {
-        if (country.capital.search(value) === 0) { return true }
-        else return false;
-      })
-  
-      this.setState({countries:data})
-      this.setState({capitalSearchKeyword: value });
+        if (country.capital.search(value) === 0) {
+          return true;
+        } else return false;
+      });
+
+      this.setState({ countries: data });
+      this.setState({ capitalSearchKeyword: value });
     } else {
       this.setState({ countries: this.state.persistentCountries });
-      this.setState({capitalSearchKeyword: value });
+      this.setState({ capitalSearchKeyword: value });
+      //this.setState({ tableSearchKeyword: null });
     }
   };
   handleSearchInTables = (e) => {
-    this.setState({ tableSearchKeyword: this.capitalize(e.target.value) });
+    const value = this.capitalize(e.target.value);
+    if (value) {
+      this.setState({capitalSearchKeyword:""})
+      const countries = JSON.parse(
+        JSON.stringify(this.state.persistentCountries)
+      );
+      const data = countries.filter((country) => {
+        if (
+          country.capital.search(value) > -1 ||
+          country.name.search(value)>-1 ||
+          country.region.search(value)>-1
+        ) {
+          return true;
+        } else return false;
+      });
+
+      this.setState({ countries: data });
+      this.setState({ tableSearchKeyword: value });
+    } else {
+      this.setState({ countries: this.state.persistentCountries });
+      this.setState({ tableSearchKeyword: value });
+      // this.setState({ capitalSearchKeyword: null });
+    }
   };
+
   assignNullExcept = (field) => {
     if (field === "name") {
       this.setState({
@@ -124,8 +151,10 @@ class CountryTable extends Component {
             <table className="table align-middle table-striped table-hover table-bordered fixed">
               <thead style={fixedHeadStyle} className="table-light text-center">
                 <tr>
-                  <th scope="col" style={{width:"5%"}}>#</th>
-                  <th scope="col" style={{width:"30%"}}>
+                  <th scope="col" style={{ width: "5%" }}>
+                    #
+                  </th>
+                  <th scope="col" style={{ width: "30%" }}>
                     Name
                     <button
                       className="btn btn-light rounded-circle px-0"
@@ -136,7 +165,7 @@ class CountryTable extends Component {
                       />
                     </button>
                   </th>
-                  <th scope="col" style={{width:"35%"}}>
+                  <th scope="col" style={{ width: "35%" }}>
                     <div className="d-inline-flex rounded-circle px-0">
                       <div className="my-auto">Capital</div>
                       <button
@@ -158,7 +187,7 @@ class CountryTable extends Component {
                       </div>
                     </div>
                   </th>
-                  <th scope="col" style={{width:"15%"}}>
+                  <th scope="col" style={{ width: "15%" }}>
                     Region
                     <button
                       className="btn btn-light rounded-circle px-0"
@@ -177,18 +206,20 @@ class CountryTable extends Component {
               <tbody className="text-head">
                 {countries &&
                   countries.map((country, index) => {
-                    return (<tr key={country.alpha2Code}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{country.name}</td>
-                      <td>{country.capital || "-"}</td>
-                      <td>{country.region || "-"}</td>
-                      <td>
-                        <Flag
-                          svgURL={country.flag}
-                          countryName={country.name}
-                        ></Flag>
-                      </td>
-                    </tr>);
+                    return (
+                      <tr key={country.alpha2Code}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{country.name}</td>
+                        <td>{country.capital || "-"}</td>
+                        <td>{country.region || "-"}</td>
+                        <td>
+                          <Flag
+                            svgURL={country.flag}
+                            countryName={country.name}
+                          ></Flag>
+                        </td>
+                      </tr>
+                    );
                   })}
               </tbody>
             </table>
