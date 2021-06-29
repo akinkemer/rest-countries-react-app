@@ -51,7 +51,7 @@ class CountryTable extends Component {
     }
   };
   handleSearchInTables = (e) => {
-    const value = this.capitalize(e.target.value);
+    const value = e.target.value;
     if (value) {
       this.setState({ capitalSearchKeyword: "" });
       const countries = JSON.parse(
@@ -59,9 +59,9 @@ class CountryTable extends Component {
       );
       const data = countries.filter((country) => {
         if (
-          country.capital.search(value) > -1 ||
-          country.name.search(value) > -1 ||
-          country.region.search(value) > -1
+          country.capital.search(new RegExp(value, "i")) > -1 ||
+          country.name.search(new RegExp(value, "i")) > -1 ||
+          country.region.search(new RegExp(value, "i")) > -1
         ) {
           return true;
         } else return false;
