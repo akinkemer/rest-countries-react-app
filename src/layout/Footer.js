@@ -38,7 +38,7 @@ function Footer() {
         style={{ backgroundColor: "#dcdcdc" }}
       >
         © {new Date().getFullYear()} Copyright:
-        <a className="text-dark" href="mailto:kemerakin@gmail.com">
+        <a className="text-dark" href="mailto:kemerakin@gmail.com" id="footer">
           Akın Kemer
         </a>
       </div>

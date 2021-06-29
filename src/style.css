@@ -4,18 +4,31 @@ a.icon {
   box-shadow: 0px 0px 2px #888;
   padding: 0.5em 0.6em;
   transition: all 0.2s ease-in-out;
-
 }
 
-a.icon:hover{
-    transform: scale(1.1);
+a.icon:hover {
+  transform: scale(1.1);
 }
 
-.sorting-icon{
+.sorting-icon {
   display: inline-block;
   transition: all 0.2s ease-in-out;
-  
 }
-.sorting-icon:hover{
+.sorting-icon:hover {
   transform: scale(1.1);
+}
+
+
+table.fixed {
+  table-layout: fixed;
+}
+table.fixed td {
+  overflow: hidden;
+}
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar {
+-ms-overflow-style: none;  /* IE and Edge */
+scrollbar-width: none;  /* Firefox */
 }

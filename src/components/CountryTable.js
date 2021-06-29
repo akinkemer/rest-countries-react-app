@@ -3,6 +3,8 @@ import Flag from "./Flag";
 import { VscSearch } from "react-icons/vsc";
 import SortingIcon from "./SortingIcon";
 import axiosInstance, { all } from "../api/ApiVariables";
+import "../style.css";
+
 
 class CountryTable extends Component {
   constructor(props) {
@@ -98,7 +100,7 @@ class CountryTable extends Component {
   };
   render() {
     const countries = this.state.countries;
-    const tableStyles = { height: "500px", overFlow: "scroll" };
+    const tableStyles = { height: "500px", overFlow: "hidden" };
     const fixedHeadStyle = { position: "sticky", top: "0" };
 
     return (
@@ -106,10 +108,10 @@ class CountryTable extends Component {
         <h1 className="display-4 text-start mt-4">Countries</h1>
         <hr />
         <div className="row m-4">
-          <div className="input-group mb-3 mt-3">
+          <div className="input-group mb-3 mt-3 d-flex-inline">
             <input
               type="text"
-              className="form-control"
+              className="form-control form-control-md rounded border-2"
               placeholder="Search"
               value={this.state.tableSearchKeyword}
               onChange={this.handleSearchInTables}
@@ -118,12 +120,12 @@ class CountryTable extends Component {
               <VscSearch size="1.5em" />
             </span>
           </div>
-          <div className="table-responsive" style={tableStyles}>
-            <table className="table align-middle table-striped table-hover table-bordered">
+          <div className="table-responsive scrollbar" style={tableStyles}>
+            <table className="table align-middle table-striped table-hover table-bordered fixed">
               <thead style={fixedHeadStyle} className="table-light text-center">
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">
+                  <th scope="col" style={{width:"5%"}}>#</th>
+                  <th scope="col" style={{width:"30%"}}>
                     Name
                     <button
                       className="btn btn-light rounded-circle px-0"
@@ -134,7 +136,7 @@ class CountryTable extends Component {
                       />
                     </button>
                   </th>
-                  <th scope="col">
+                  <th scope="col" style={{width:"35%"}}>
                     <div className="d-inline-flex rounded-circle px-0">
                       <div className="my-auto">Capital</div>
                       <button
@@ -145,7 +147,7 @@ class CountryTable extends Component {
                           direction={this.state.capitalSortingDirection}
                         />
                       </button>
-                      <div className="input-group pt-1">
+                      <div className="input-group pt-1 d-none d-md-block">
                         <input
                           type="text"
                           className="form-control-sm"
@@ -156,7 +158,7 @@ class CountryTable extends Component {
                       </div>
                     </div>
                   </th>
-                  <th scope="col">
+                  <th scope="col" style={{width:"15%"}}>
                     Region
                     <button
                       className="btn btn-light rounded-circle px-0"
