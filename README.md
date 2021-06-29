@@ -1,2 +1,3 @@
 
-## REST COUNTRIES APP
+## REST COUNTRIES REACT APP
+#### Akın Kemer
