@@ -33,7 +33,7 @@ class CountryTable extends Component {
     const value = this.capitalize(e.target.value);
 
     if (value) {
-      this.setState({tableSearchKeyword:""})
+      this.setState({ tableSearchKeyword: "" });
       const countries = JSON.parse(
         JSON.stringify(this.state.persistentCountries)
       );
@@ -48,21 +48,20 @@ class CountryTable extends Component {
     } else {
       this.setState({ countries: this.state.persistentCountries });
       this.setState({ capitalSearchKeyword: value });
-      //this.setState({ tableSearchKeyword: null });
     }
   };
   handleSearchInTables = (e) => {
     const value = this.capitalize(e.target.value);
     if (value) {
-      this.setState({capitalSearchKeyword:""})
+      this.setState({ capitalSearchKeyword: "" });
       const countries = JSON.parse(
         JSON.stringify(this.state.persistentCountries)
       );
       const data = countries.filter((country) => {
         if (
           country.capital.search(value) > -1 ||
-          country.name.search(value)>-1 ||
-          country.region.search(value)>-1
+          country.name.search(value) > -1 ||
+          country.region.search(value) > -1
         ) {
           return true;
         } else return false;
@@ -73,11 +72,10 @@ class CountryTable extends Component {
     } else {
       this.setState({ countries: this.state.persistentCountries });
       this.setState({ tableSearchKeyword: value });
-      // this.setState({ capitalSearchKeyword: null });
     }
   };
 
-  assignNullExcept = (field) => {
+  setNullOtherFields = (field) => {
     if (field === "name") {
       this.setState({
         capitalSortingDirection: null,
@@ -98,7 +96,7 @@ class CountryTable extends Component {
 
   sortingRequest = (field) => {
     if (field != null) {
-      this.assignNullExcept(field);
+      this.setNullOtherFields(field);
 
       const fieldNameInState = `${field}SortingDirection`;
 
@@ -129,6 +127,12 @@ class CountryTable extends Component {
     const countries = this.state.countries;
     const tableStyles = { height: "500px", overFlow: "hidden" };
     const fixedHeadStyle = { position: "sticky", top: "0" };
+    const columnStyles = {
+      number: { width: "5%" },
+      name: { width: "30%" },
+      capital: { width: "35%" },
+      region: { width: "15%" },
+    };
 
     return (
       <div className="container">
@@ -148,13 +152,13 @@ class CountryTable extends Component {
             </span>
           </div>
           <div className="table-responsive scrollbar" style={tableStyles}>
-            <table className="table align-middle table-striped table-hover table-bordered fixed">
+            <table className="table align-middle table-striped table-hover fixed">
               <thead style={fixedHeadStyle} className="table-light text-center">
                 <tr>
-                  <th scope="col" style={{ width: "5%" }}>
+                  <th scope="col" style={columnStyles.number}>
                     #
                   </th>
-                  <th scope="col" style={{ width: "30%" }}>
+                  <th scope="col" style={columnStyles.name}>
                     Name
                     <button
                       className="btn btn-light rounded-circle px-0"
@@ -165,7 +169,7 @@ class CountryTable extends Component {
                       />
                     </button>
                   </th>
-                  <th scope="col" style={{ width: "35%" }}>
+                  <th scope="col" style={columnStyles.capital}>
                     <div className="d-inline-flex rounded-circle px-0">
                       <div className="my-auto">Capital</div>
                       <button
@@ -187,7 +191,7 @@ class CountryTable extends Component {
                       </div>
                     </div>
                   </th>
-                  <th scope="col" style={{ width: "15%" }}>
+                  <th scope="col" style={columnStyles.region}>
                     Region
                     <button
                       className="btn btn-light rounded-circle px-0"
@@ -203,7 +207,7 @@ class CountryTable extends Component {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-head">
+              <tbody className="text-center">
                 {countries &&
                   countries.map((country, index) => {
                     return (
