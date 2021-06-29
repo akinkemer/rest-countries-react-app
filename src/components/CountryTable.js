@@ -129,9 +129,10 @@ class CountryTable extends Component {
     const fixedHeadStyle = { position: "sticky", top: "0" };
     const columnStyles = {
       number: { width: "5%" },
-      name: { width: "30%" },
+      name: { width: "35%" },
       capital: { width: "35%" },
-      region: { width: "15%" },
+      region: { width: "10%" },
+      flag:{width:"15%"}
     };
 
     return (
@@ -202,7 +203,7 @@ class CountryTable extends Component {
                       />
                     </button>
                   </th>
-                  <th scope="col" className="pb-3">
+                  <th scope="col" className="pb-3" style={columnStyles.flag}>
                     Flag
                   </th>
                 </tr>
